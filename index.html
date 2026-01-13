@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .auth-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .form-container {
+            padding: 30px 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .success {
+            color: #27ae60;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .toggle-form button {
+            background: none;
+            color: #667eea;
+            padding: 0;
+            font-size: 14px;
+            width: auto;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 5px;
+        }
+        
+        .toggle-form button:hover {
+            transform: none;
+            color: #764ba2;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .dashboard {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .dashboard h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard .user-email {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard button {
+            background: #e74c3c;
+            width: auto;
+            padding: 10px 20px;
+        }
+        
+        .dashboard button:hover {
+            background: #c0392b;
+        }
+        
+        .secret-input-container {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .secret-input-container input {
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .credits-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .credits-message.show {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login/Signup Container -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-header">
+            <h1 id="formTitle">Sign Up</h1>
+        </div>
+        
+        <div class="form-container">
+            <!-- Sign Up Form -->
+            <div id="signupForm">
+                <div id="signupSuccess" class="success hidden"></div>
+                <div id="signupError" class="error"></div>
+                
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <button onclick="handleSignup()">Create Account</button>
+                
+                <div class="toggle-form">
+                    Already have an account?
+                    <button onclick="toggleForm()">Log In</button>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="hidden">
+                <div id="loginError" class="error"></div>
+                
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                
+                <button onclick="handleLogin()">Log In</button>
+                
+                <div class="toggle-form">
+                    Don't have an account?
+                    <button onclick="toggleForm()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard (shown after successful login) -->
+    <div id="dashboard" class="dashboard hidden">
+        <h1>Welcome to the Website!</h1>
+        <p class="user-email" id="userEmailDisplay"></p>
+        <p>You have successfully logged in. You can now access all features.</p>
+        <button onclick="handleLogout()">Log Out</button>
+        
+        <div class="secret-input-container">
+            <input type="password" id="secretInput" placeholder="..." maxlength="20">
+            <div id="creditsMessage" class="credits-message">
+                Napravljeno od Adrijana Plušeca<br>
+                Njegova škola je Ivana Brlić Mazuranić
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize accounts from localStorage
+        function initializeAccounts() {
+            if (!localStorage.getItem('accounts')) {
+                localStorage.setItem('accounts', JSON.stringify({}));
+            }
+        }
+        
+        // Toggle between login and signup forms
+        function toggleForm() {
+            const signupForm = document.getElementById('signupForm');
+            const loginForm = document.getElementById('loginForm');
+            const formTitle = document.getElementById('formTitle');
+            
+            signupForm.classList.toggle('hidden');
+            loginForm.classList.toggle('hidden');
+            
+            // Clear errors and success messages
+            document.getElementById('signupError').textContent = '';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('signupSuccess').textContent = '';
+            document.getElementById('signupSuccess').classList.add('hidden');
+            
+            // Clear form fields
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirmPassword').value = '';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            // Update title
+            if (signupForm.classList.contains('hidden')) {
+                formTitle.textContent = 'Log In';
+            } else {
+                formTitle.textContent = 'Sign Up';
+            }
+        }
+        
+        // Handle signup
+        function handleSignup() {
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const errorDiv = document.getElementById('signupError');
+            const successDiv = document.getElementById('signupSuccess');
+            
+            // Clear previous errors
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+            successDiv.classList.add('hidden');
+            
+            // Validation
+            if (!email) {
+                errorDiv.textContent = 'Please enter an email address.';
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                errorDiv.textContent = 'Please enter a valid email address.';
+                return;
+            }
+            
+            if (!password) {
+                errorDiv.textContent = 'Please enter a password.';
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorDiv.textContent = 'Password must be at least 6 characters long.';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match.';
+                return;
+            }
+            
+            // Check if account already exists
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            if (accounts[email]) {
+                errorDiv.textContent = 'This email is already registered.';
+                return;
+            }
+            
+            // Create account
+            accounts[email] = password;
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            
+            // Show success message
+            successDiv.textContent = 'Account created successfully! You can now log in.';
+            successDiv.classList.remove('hidden');
+            
+            // Clear form
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirmPassword').value = '';
+            
+            // Switch to login form after 2 seconds
+            setTimeout(() => {
+                toggleForm();
+            }, 2000);
+        }
+        
+        // Handle login
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            // Clear previous errors
+            errorDiv.textContent = '';
+            
+            // Validation
+            if (!email) {
+                errorDiv.textContent = 'Please enter an email address.';
+                return;
+            }
+            
+            if (!password) {
+                errorDiv.textContent = 'Please enter a password.';
+                return;
+            }
+            
+            // Check credentials
+            const accounts = JSON.parse(localStorage.getItem('accounts'));
+            if (!accounts[email]) {
+                errorDiv.textContent = 'Email not found. Please sign up first.';
+                return;
+            }
+            
+            if (accounts[email] !== password) {
+                errorDiv.textContent = 'Incorrect password. Please try again.';
+                return;
+            }
+            
+            // Successful login
+            localStorage.setItem('currentUser', email);
+            showDashboard(email);
+        }
+        
+        // Show dashboard after successful login
+        function showDashboard(email) {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('userEmailDisplay').textContent = 'Logged in as: ' + email;
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            
+            // Reset to signup form
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('formTitle').textContent = 'Sign Up';
+            
+            // Clear forms
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirmPassword').value = '';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+        
+        // Email validation helper
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Check if user is already logged in
+        function checkLogin() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showDashboard(currentUser);
+            }
+        }
+        
+        // Handle secret input
+        document.addEventListener('keyup', function(event) {
+            const secretInput = document.getElementById('secretInput');
+            if (secretInput && document.activeElement === secretInput) {
+                checkSecretPassword(secretInput.value);
+            }
+        });
+        
+        function checkSecretPassword(input) {
+            const creditsMessage = document.getElementById('creditsMessage');
+            const secretPassword = 'natasa pluscec';
+            
+            if (input.toLowerCase() === secretPassword) {
+                creditsMessage.classList.add('show');
+            } else {
+                creditsMessage.classList.remove('show');
+            }
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initializeAccounts();
+            checkLogin();
+        });
+    </script>
+</body>
+</html>
